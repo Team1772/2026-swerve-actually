@@ -54,7 +54,7 @@ public class ShooterSubsystem extends SubsystemBase{
         rightMotoroutputConfigs.PeakForwardDutyCycle = 1;
         rightMotoroutputConfigs.PeakReverseDutyCycle = -1;
         rightMotoroutputConfigs.withNeutralMode(NeutralModeValue.Coast);
-        // rightMotoroutputConfigs.withInverted(InvertedValue.Clockwise_Positive);
+        rightMotoroutputConfigs.withInverted(InvertedValue.Clockwise_Positive);
         masterConfig.apply(rightMotoroutputConfigs);
         // slaveConfig.apply(rightMotoroutputConfigs);
 

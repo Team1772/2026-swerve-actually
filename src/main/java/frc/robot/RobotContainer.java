@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.subsystems.DriveNeoTest;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
@@ -29,7 +30,8 @@ public class RobotContainer
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/neo"));
   private final SendableChooser<Command> autoChooser;
-   private final ShooterSubsystem shooterSubsystem;
+  private final ShooterSubsystem shooterSubsystem;
+  private final DriveNeoTest testevortex;
 
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
@@ -89,6 +91,7 @@ public class RobotContainer
   {
 
     shooterSubsystem = new ShooterSubsystem();
+    testevortex = new DriveNeoTest();
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
     
@@ -184,7 +187,8 @@ public class RobotContainer
     //----------------------------------------------------------------------------------------
     //end of swerve buttons
     //----------------------------------------------------------------------------------------
-    driverXbox.a().whileTrue(Commands.startEnd(() -> shooterSubsystem.percentOut(0.02), shooterSubsystem::stop, shooterSubsystem));
+    driverXbox.a().whileTrue(Commands.startEnd(() -> shooterSubsystem.percentOut(0.5), shooterSubsystem::stop, shooterSubsystem));
+    driverXbox.leftBumper().whileTrue(Commands.startEnd(() -> testevortex.percentOut(0.5), testevortex::stop, testevortex));
   }
 
 
