@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems.swervedrive;
 
 import static edu.wpi.first.units.Units.Meter;
@@ -35,7 +31,6 @@ import frc.robot.Constants;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
@@ -52,14 +47,8 @@ import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 public class SwerveSubsystem extends SubsystemBase
 {
-  /**
-   * Swerve drive object.
-   */
   private final SwerveDrive swerveDrive;
   
-  /**
-   * Enable vision odometry updates while driving.
-   */
   private final boolean     visionDriveTest = false;
  
   /**
@@ -76,7 +65,7 @@ public class SwerveSubsystem extends SubsystemBase
                                        : new Pose2d(new Translation2d(Meter.of(16),
                                                                       Meter.of(4)),
                                                     Rotation2d.fromDegrees(180));
-    // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
+
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
     try
     {
@@ -91,24 +80,16 @@ public class SwerveSubsystem extends SubsystemBase
     swerveDrive.setCosineCompensator(false);//!SwerveDriveTelemetry.isSimulation); // Disables cosine compensation for simulations since it causes discrepancies not seen in real life.
     swerveDrive.setAngularVelocityCompensation(true,
                                                true,
-                                               0.1); //Correct for skew that gets worse as angular velocity increases. Start with a coefficient of 0.1.
+                                               0.1); 
     swerveDrive.setModuleEncoderAutoSynchronize(false,
-                                                1); // Enable if you want to resynchronize your absolute encoders and motor encoders periodically when they are not moving.
-    // swerveDrive.pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder and push the offsets onto it. Throws warning if not possible
+                                                1); 
     if (visionDriveTest)
     {
-      // Stop the odometry thread if we are using vision that way we can synchronize updates better.
       swerveDrive.stopOdometryThread();
     }
     setupPathPlanner();
   }
 
-  /**
-   * Construct the swerve drive.
-   *
-   * @param driveCfg      SwerveDriveConfiguration for the swerve.
-   * @param controllerCfg Swerve Controller.
-   */
   public SwerveSubsystem(SwerveDriveConfiguration driveCfg, SwerveControllerConfiguration controllerCfg)
   {
     swerveDrive = new SwerveDrive(driveCfg,
@@ -116,16 +97,6 @@ public class SwerveSubsystem extends SubsystemBase
                                   Constants.MAX_SPEED,
                                   new Pose2d(new Translation2d(Meter.of(2), Meter.of(0)),
                                              Rotation2d.fromDegrees(0)));
-  }
-
-  @Override
-  public void periodic()
-  {
-    // When vision is enabled we must manually update odometry in SwerveDrive
-    if (visionDriveTest)
-    {
-      swerveDrive.updateOdometry();
-    }
   }
 
   @Override
@@ -138,8 +109,6 @@ public class SwerveSubsystem extends SubsystemBase
    */
   public void setupPathPlanner()
   {
-    // Load the RobotConfig from the GUI settings. You should probably
-    // store this in your Constants file
     RobotConfig config;
     try
     {

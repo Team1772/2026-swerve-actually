@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -26,21 +22,11 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import swervelib.SwerveInputStream;
 
-/**
- * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
- * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
- * Instead, the structure of the robot (including subsystems, commands, and trigger mappings) should be declared here.
- */
 public class RobotContainer
 {
-
-  // Replace with CommandPS4Controller or CommandJoystick if needed
   final         CommandXboxController driverXbox = new CommandXboxController(0);
-  // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/neo"));
-
-  // Establish a Sendable Chooser that will be able to be sent to the SmartDashboard, allowing selection of desired auto
   private final SendableChooser<Command> autoChooser;
 
   /**
@@ -77,31 +63,29 @@ public class RobotContainer
                                                                     .allianceRelativeControl(true);
   // Derive the heading axis with math!
   SwerveInputStream driveDirectAngleKeyboard     = driveAngularVelocityKeyboard.copy()
-                                                                               .withControllerHeadingAxis(() ->
-                                                                                                              Math.sin(
-                                                                                                                  driverXbox.getRawAxis(
-                                                                                                                      2) *
-                                                                                                                  Math.PI) *
-                                                                                                              (Math.PI *
-                                                                                                               2),
-                                                                                                          () ->
-                                                                                                              Math.cos(
-                                                                                                                  driverXbox.getRawAxis(
-                                                                                                                      2) *
-                                                                                                                  Math.PI) *
-                                                                                                              (Math.PI *
-                                                                                                               2))
-                                                                               .headingWhile(true)
-                                                                               .translationHeadingOffset(true)
-                                                                               .translationHeadingOffset(Rotation2d.fromDegrees(
-                                                                                   0));
+    .withControllerHeadingAxis(() ->
+                                  Math.sin(
+                                      driverXbox.getRawAxis(
+                                          2) *
+                                      Math.PI) *
+                                  (Math.PI *
+                                    2),
+                              () ->
+                                  Math.cos(
+                                      driverXbox.getRawAxis(
+                                          2) *
+                                      Math.PI) *
+                                  (Math.PI *
+                                    2))
+    .headingWhile(true)
+    .translationHeadingOffset(true)
+    .translationHeadingOffset(Rotation2d.fromDegrees(
+        0));
 
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
+
   public RobotContainer()
   {
-    // Configure the trigger bindings
+
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
     
@@ -170,15 +154,11 @@ public class RobotContainer
       driverXbox.button(2).whileTrue(Commands.runEnd(() -> driveDirectAngleKeyboard.driveToPoseEnabled(true),
                                                      () -> driveDirectAngleKeyboard.driveToPoseEnabled(false)));
 
-//      driverXbox.b().whileTrue(
-//          drivebase.driveToPose(
-//              new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
-//                              );
 
     }
     if (DriverStation.isTest())
     {
-      drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity); // Overrides drive command above!
+      drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity); 
 
       driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
@@ -197,14 +177,9 @@ public class RobotContainer
 
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
+
   public Command getAutonomousCommand()
   {
-    // Pass in the selected auto from the SmartDashboard as our desired autnomous commmand 
     return autoChooser.getSelected();
   }
 
