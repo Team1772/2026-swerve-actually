@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import swervelib.SwerveInputStream;
@@ -28,6 +29,7 @@ public class RobotContainer
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/neo"));
   private final SendableChooser<Command> autoChooser;
+   private final ShooterSubsystem shooterSubsystem;
 
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
@@ -86,6 +88,7 @@ public class RobotContainer
   public RobotContainer()
   {
 
+    shooterSubsystem = new ShooterSubsystem();
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
     
@@ -115,6 +118,9 @@ public class RobotContainer
    */
   private void configureBindings()
   {
+    //----------------------------------------------------------------------------------------
+    //swerve buttons
+    //----------------------------------------------------------------------------------------
     Command driveFieldOrientedDirectAngle      = drivebase.driveFieldOriented(driveDirectAngle);
     Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
     Command driveRobotOrientedAngularVelocity  = drivebase.driveFieldOriented(driveRobotOriented);
@@ -175,6 +181,10 @@ public class RobotContainer
       driverXbox.rightBumper().onTrue(Commands.none());
     }
 
+    //----------------------------------------------------------------------------------------
+    //end of swerve buttons
+    //----------------------------------------------------------------------------------------
+    driverXbox.a().whileTrue(Commands.startEnd(() -> shooterSubsystem.percentOut(0.02), shooterSubsystem::stop, shooterSubsystem));
   }
 
 
