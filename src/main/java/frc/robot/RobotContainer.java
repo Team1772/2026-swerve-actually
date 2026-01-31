@@ -30,7 +30,7 @@ public class RobotContainer
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/neo"));
   private final SendableChooser<Command> autoChooser;
-  private final ShooterSubsystem shooterSubsystem;
+  private final ShooterSubsystem shooterSubsystem; //COMENTAR SE TESTAR INTAKE
   private final DriveNeoTest testevortex;
 
   /**
@@ -90,7 +90,7 @@ public class RobotContainer
   public RobotContainer()
   {
 
-    shooterSubsystem = new ShooterSubsystem();
+    shooterSubsystem = new ShooterSubsystem(); //COMENTAR SE TESTAR INTAKE
     testevortex = new DriveNeoTest();
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
@@ -187,8 +187,10 @@ public class RobotContainer
     //----------------------------------------------------------------------------------------
     //end of swerve buttons
     //----------------------------------------------------------------------------------------
+    
+    // VV COMENTAR SE TESTAR INTAKE
     driverXbox.a().whileTrue(Commands.startEnd(() -> shooterSubsystem.percentOut(0.5), shooterSubsystem::stop, shooterSubsystem));
-    driverXbox.leftBumper().whileTrue(Commands.startEnd(() -> testevortex.percentOut(0.5), testevortex::stop, testevortex));
+    driverXbox.leftBumper().whileTrue(Commands.startEnd(() -> testevortex.percentOut(-0.7), testevortex::stop, testevortex));
   }
 
 
