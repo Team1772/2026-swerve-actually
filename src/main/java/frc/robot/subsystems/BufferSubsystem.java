@@ -12,16 +12,12 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class DriveNeoTest extends SubsystemBase {
+public class BufferSubsystem extends SubsystemBase {
 private SparkMax motorVortex;
 
-  public DriveNeoTest() {
-    this.motorVortex = new SparkMax(15, MotorType.kBrushless);
+  public BufferSubsystem() {
+    this.motorVortex = new SparkMax(12, MotorType.kBrushless);
     
-    // this.motorVortex.restoreFactoryDefaults();
-    
-    // this.motorVortex.setIdleMode(IdleMode.kCoast);
-
     SparkMaxConfig config = new SparkMaxConfig();
     config
         .smartCurrentLimit(50)

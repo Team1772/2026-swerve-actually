@@ -18,7 +18,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.subsystems.DriveNeoTest;
+import frc.robot.subsystems.BufferSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
@@ -30,8 +31,9 @@ public class RobotContainer
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/neo"));
   private final SendableChooser<Command> autoChooser;
-  private final ShooterSubsystem shooterSubsystem; //COMENTAR SE TESTAR INTAKE
-  private final DriveNeoTest testevortex;
+  private final ShooterSubsystem shooterSubsystem;
+  private final IntakeSubsystem intakeSubsystem;
+  private final BufferSubsystem bufferSubsystem;
 
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
@@ -89,9 +91,9 @@ public class RobotContainer
 
   public RobotContainer()
   {
-
-    shooterSubsystem = new ShooterSubsystem(); //COMENTAR SE TESTAR INTAKE
-    testevortex = new DriveNeoTest();
+    bufferSubsystem = new BufferSubsystem();
+    shooterSubsystem = new ShooterSubsystem();
+    intakeSubsystem = new IntakeSubsystem();
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
     
@@ -188,11 +190,11 @@ public class RobotContainer
     //end of swerve buttons
     //----------------------------------------------------------------------------------------
     
-    // VV COMENTAR SE TESTAR INTAKE
+    // VV COMENTAR SE TESTAR INTAKE 
     driverXbox.a().whileTrue(Commands.startEnd(() -> shooterSubsystem.percentOut(0.5), shooterSubsystem::stop, shooterSubsystem));
-    driverXbox.leftBumper().whileTrue(Commands.startEnd(() -> testevortex.percentOut(-0.7), testevortex::stop, testevortex));
+    driverXbox.rightBumper().whileTrue(Commands.startEnd(() -> bufferSubsystem.percentOut(0.5), bufferSubsystem::stop, bufferSubsystem));
+    driverXbox.leftBumper().whileTrue(Commands.startEnd(() -> intakeSubsystem.percentOut(-0.8), intakeSubsystem::stop, intakeSubsystem));
   }
-
 
   public Command getAutonomousCommand()
   {

@@ -13,7 +13,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -32,7 +33,13 @@ public class ShooterSubsystem extends SubsystemBase{
         leftMotor = new TalonFX(11);
 
         follower = new Follower(10, MotorAlignmentValue.Opposed);
-         
+        
+         SparkMaxConfig config = new SparkMaxConfig();
+        config
+        .smartCurrentLimit(50)
+        .idleMode(IdleMode.kCoast)
+        .inverted(true);
+
         leftMotor.getConfigurator().apply(new TalonFXConfiguration());
         rightMotor.getConfigurator().apply(new TalonFXConfiguration());
 
@@ -40,8 +47,7 @@ public class ShooterSubsystem extends SubsystemBase{
         TalonFXConfigurator masterConfig = rightMotor.getConfigurator();
         TalonFXConfigurator slaveConfig = leftMotor.getConfigurator();
 
-        
-        
+
         // Slot0Configs positionPIDConfigs = new Slot0Configs();
         // positionPIDConfigs.kP = 0.2;
         // positionPIDConfigs.kI = 0.005;
@@ -91,7 +97,7 @@ public class ShooterSubsystem extends SubsystemBase{
         rightMotor.setControl(percentOut.withOutput(speed));
         leftMotor.setControl(follower);
     }
-
+    
     public void velocityOut(double speed) {
         rightMotor.setControl(velocityOut.withVelocity(speed));
         leftMotor.setControl(follower);
@@ -101,6 +107,7 @@ public class ShooterSubsystem extends SubsystemBase{
         rightMotor.stopMotor();
         leftMotor.stopMotor();
     }
+
 
     public double getVelocity() {
         return rightMotor.getVelocity().getValueAsDouble();
